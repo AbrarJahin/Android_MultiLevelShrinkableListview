@@ -1,10 +1,8 @@
 package com.cloud_solutions.multilevelshrinkablelistview;
 
-import java.util.ArrayList;
 import android.app.Activity;
 import android.content.Context;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
@@ -14,6 +12,8 @@ import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
+
+import java.util.ArrayList;
 
 
 public class MainActivity extends Activity
@@ -83,12 +83,15 @@ public class MainActivity extends Activity
         {
             LayoutInflater inflater_for_Level_1_data_showing = null;
             inflater_for_Level_1_data_showing = (LayoutInflater) getApplicationContext().getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-            View Level_1_View = inflater_for_Level_1_data_showing.inflate(R.layout.row_level_1, null);
+            final View Level_1_View = inflater_for_Level_1_data_showing.inflate(R.layout.row_level_1, null);
 
             final TextView Level_1_ProductName = (TextView) Level_1_View.findViewById(R.id.textViewName);
             final RelativeLayout Level_1_Layout =(RelativeLayout)Level_1_View.findViewById(R.id.layout_Level_1_relative);
             final ImageView Level_1_Arrow=(ImageView)Level_1_View.findViewById(R.id.imgLevel_1_Arrow);
             final LinearLayout Level_1_scrollable_part_Layout_for_Level_2_data_showing=(LinearLayout)Level_1_View.findViewById(R.id.Level_1_Scroll_for_Level_2);
+
+            //Set extra hidden value for next time using    - store current position for accessing value next time
+            Level_1_View.setTag(i);
 
             //checks if menu is already opened or not
             if(is_Level_1_View_Clicked ==false)
@@ -132,12 +135,15 @@ public class MainActivity extends Activity
             {
                 LayoutInflater inflater_for_level_2_data_showing = null;
                 inflater_for_level_2_data_showing = (LayoutInflater) getApplicationContext().getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-                View Level_2_View = inflater_for_level_2_data_showing.inflate(R.layout.row_level_2, null);
+                final View Level_2_View = inflater_for_level_2_data_showing.inflate(R.layout.row_level_2, null);
 
                 TextView Level_2_Item_Name = (TextView) Level_2_View.findViewById(R.id.Level_2_Name);
                 final RelativeLayout Level_2_Layout=(RelativeLayout)Level_2_View.findViewById(R.id.Level_2_Layout);
                 final ImageView imageLevel_2_Arrow=(ImageView)Level_2_View.findViewById(R.id.imageLevel_2_Arrow);
                 final LinearLayout Level_2_scrollable_part_Layout_for_Level_3_data_showing=(LinearLayout)Level_2_View.findViewById(R.id.Level_2_Scroll_for_Level_3);
+
+                //Set extra hidden value for next time using    - store current position for accessing value next time
+                Level_2_View.setTag(j);
 
                 //checkes if menu is already opened or not
                 if(is_Level_2_View_Clicked ==false)
@@ -181,7 +187,7 @@ public class MainActivity extends Activity
                 {
                     LayoutInflater inflater_for_level_3_data_showing = null;
                     inflater_for_level_3_data_showing = (LayoutInflater) getApplicationContext().getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-                    View Level_3_View = inflater_for_level_3_data_showing.inflate(R.layout.row_level_3, null);
+                    final View Level_3_View = inflater_for_level_3_data_showing.inflate(R.layout.row_level_3, null);
 
                     TextView Level_3_Item_Name = (TextView) Level_3_View.findViewById(R.id.Level_3_Item_Name);
                     TextView Level_3_Item_Price = (TextView) Level_3_View.findViewById(R.id.Level_3_Item_Price);
@@ -193,17 +199,24 @@ public class MainActivity extends Activity
                     Level_3_Item_Name.setText(getLevel_3_Item_Name);
                     Level_3_Item_Price.setText(getLevel_3_Item_Price);
 
+                    //Set extra hidden value for next time using    - store current position for accessing value next time
+                    Level_3_View.setTag(k);
+
+                    ////////////////////////////////////////////////////Add anything for level 3 data
                     //Handles onclick effect on list item of level 3
-                    Level_3_Layout.setOnTouchListener(new OnTouchListener()
+                    Level_3_Layout.setOnClickListener(new View.OnClickListener()
                     {
                         @Override
-                        public boolean onTouch(View v, MotionEvent event)
+                        public void onClick(View v)
                         {
-                            //Log.e("Value to see",Integer.toString(i)+j+k);
-                            //String message_to_show = "test toast";//Integer.toString(finalI)+" "+ Integer.toString(finalI) +" "+ Integer.toString(finalI);
-                            //Toast.makeText(getApplicationContext(), message_to_show, Toast.LENGTH_SHORT).show();
-                            /////////////////////////////////////////////////////////////////////////////////////
-                            return false;       //Stop propagating in other views
+                            int Level_1_clicked_position = (int) Level_1_View.getTag();
+                            int Level_2_clicked_position = (int) Level_2_View.getTag();
+                            int Level_3_clicked_position = (int) Level_3_View.getTag();
+
+                            String clicked_item_name = mainList.get(Level_1_clicked_position).get_Model_of_Level_2_from_Level_1().get(Level_2_clicked_position).set_Model_of_Level_3_from_Level_2().get(Level_3_clicked_position).getItemName();
+
+                            String message_to_show = clicked_item_name;
+                            Toast.makeText(getApplicationContext(), message_to_show, Toast.LENGTH_SHORT).show();
                         }
                     });
                     ///////////////////////////////////////////////////
